@@ -12,18 +12,14 @@
             --color-text-primary: #f9fafb;
             --color-text-secondary: #d1d5db;
             --color-text-muted: #9ca3af;
-            --color-primary: #ff007f;      /* HOLLAB pink */
+            --color-primary: #ff007f;
             --color-primary-hover: #e60072;
-            --color-accent-dark: #33333b;  /* HOLLAB dark grey vibe */
+            --color-accent-dark: #33333b;
             --color-border: rgba(156, 163, 175, 0.4);
             --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-family-base);
@@ -33,10 +29,7 @@
             line-height: 1.5;
         }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1600px; margin: 0 auto; }
 
         header {
             margin-bottom: 30px;
@@ -139,9 +132,7 @@
             margin-bottom: 12px;
         }
 
-        .add-task-form {
-            margin-bottom: 20px;
-        }
+        .add-task-form { margin-bottom: 20px; }
 
         .add-task-form label {
             font-size: 0.8rem;
@@ -202,23 +193,13 @@
             transform: translateX(2px);
         }
 
-        .task-item.dragging {
-            opacity: 0.5;
-        }
+        .task-item.dragging { opacity: 0.5; }
 
-        .task-info {
-            flex: 1;
-        }
+        .task-info { flex: 1; }
 
-        .task-name {
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
+        .task-name { font-weight: 600; margin-bottom: 2px; }
 
-        .task-duration {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
-        }
+        .task-duration { font-size: 0.8rem; color: var(--color-text-muted); }
 
         .task-delete {
             background: rgba(239, 68, 68, 0.12);
@@ -240,16 +221,19 @@
             background: var(--color-bg-elevated);
             padding: 16px 16px 20px 16px;
             border-radius: 16px;
-            overflow-x: auto;
             border: 1px solid var(--color-border);
+            overflow: hidden;
         }
 
+        /* New grid-based calendar */
         .calendar-grid {
             display: grid;
             grid-template-columns: 64px repeat(7, 1fr);
+            grid-auto-rows: 20px; /* each row = 15 mins */
             gap: 1px;
             background: rgba(31, 41, 55, 0.9);
             border-radius: 12px;
+            position: relative;
             overflow: hidden;
         }
 
@@ -263,11 +247,6 @@
             border-bottom: 1px solid var(--color-border);
         }
 
-        .calendar-header:first-child {
-            background: transparent;
-            border-bottom: none;
-        }
-
         .calendar-header span.date {
             display: block;
             font-size: 0.75rem;
@@ -277,61 +256,62 @@
         }
 
         .time-label {
-            background: var(--color-accent-dark);
-            padding: 4px;
-            text-align: right;
             font-size: 0.8rem;
             color: var(--color-text-secondary);
-            border-bottom: 1px solid rgba(55, 65, 81, 0.7);
+            padding: 4px;
+            text-align: right;
         }
 
         .time-label.quarter {
             color: transparent;
-            border-bottom-style: dotted;
-            border-bottom-color: rgba(75, 85, 99, 0.5);
         }
 
-        .time-slot {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 1px 3px 1px 3px;
-            min-height: 20px;
-            position: relative;
-            transition: background 0.12s, border 0.12s;
-            border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+        .time-row {
+            border-top: 1px solid rgba(31, 41, 55, 0.9);
         }
 
-        .time-slot.hour-start {
+        .time-row.hour {
             border-top: 1px solid rgba(148, 163, 184, 0.5);
         }
 
-        .time-slot.drag-over {
-            background: rgba(255, 0, 127, 0.18);
-            outline: 2px dashed var(--color-primary);
-            outline-offset: -2px;
+        .day-cell {
+            border-top: 1px solid rgba(31, 41, 55, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .day-cell.hour { border-top: 1px solid rgba(148, 163, 184, 0.5); }
+
+        .day-slot {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Scheduled blocks using grid-row spans */
+        .events-layer {
+            grid-column: 2 / -1;
+            grid-row: 2 / -1;
+            position: relative;
+            pointer-events: none;
         }
 
         .scheduled-task {
+            position: relative;
+            pointer-events: auto;
             background: linear-gradient(145deg, #ff007f 0%, #ff4fa5 40%, #ff88c2 100%);
             padding: 8px 8px 6px 8px;
             border-radius: 8px;
-            cursor: move;
-            margin-bottom: 2px;
             color: #0b0b10;
             font-weight: 600;
             font-size: 0.85rem;
             box-shadow: 0 4px 10px rgba(15, 23, 42, 0.9);
-            position: relative;
+            border: 1px solid rgba(15, 23, 42, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border: 1px solid rgba(15, 23, 42, 0.6);
             overflow: hidden;
         }
 
-        .scheduled-task-content {
-            flex: 1;
-            min-width: 0;
-        }
+        .scheduled-task-content { flex: 1; min-width: 0; }
 
         .scheduled-task-title {
             white-space: nowrap;
@@ -372,9 +352,7 @@
             letter-spacing: 0.06em;
         }
 
-        .scheduled-btn:hover {
-            background: rgba(15, 23, 42, 0.3);
-        }
+        .scheduled-btn:hover { background: rgba(15, 23, 42, 0.3); }
 
         .scheduled-btn.delete {
             background: rgba(248, 113, 113, 0.25);
@@ -384,14 +362,7 @@
             background: rgba(248, 113, 113, 0.35);
         }
 
-        .scheduled-task:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(15, 23, 42, 1);
-        }
-
-        .scheduled-task.dragging {
-            opacity: 0.55;
-        }
+        .scheduled-task.dragging { opacity: 0.6; }
 
         .stats {
             display: flex;
@@ -422,19 +393,9 @@
         }
 
         @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .task-pool {
-                max-height: 420px;
-            }
-
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
+            .main-content { grid-template-columns: 1fr; }
+            .task-pool { max-height: 420px; }
+            header { flex-direction: column; align-items: flex-start; }
             .header-actions {
                 width: 100%;
                 justify-content: flex-start;
@@ -445,405 +406,358 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="brand">
-                <!-- Replace src with your own hosted logo path -->
-               <img src="HOLLAB-4.jpg" alt="HOLLAB Logo" class="brand-logo">
-                <h1>HOLLAB Weekly Time Blocker</h1>
+<div class="container">
+    <header>
+        <div class="brand">
+            <img src="HOLLAB-4.jpg" alt="HOLLAB Logo" class="brand-logo">
+            <h1>HOLLAB Weekly Time Blocker</h1>
+        </div>
+        <div class="header-actions">
+            <div class="week-selector">
+                <button id="prevWeek">&larr; Prev Week</button>
+                <span id="weekDisplay">Loading...</span>
+                <button id="nextWeek">Next Week &rarr;</button>
             </div>
-            <div class="header-actions">
-                <div class="week-selector">
-                    <button id="prevWeek">&larr; Prev Week</button>
-                    <span id="weekDisplay">Loading...</span>
-                    <button id="nextWeek">Next Week &rarr;</button>
-                </div>
-            </div>
-        </header>
+        </div>
+    </header>
 
-        <div class="main-content">
-            <div class="task-pool">
-                <h2>Activity Pool</h2>
-                <p>Drag activities into the calendar. Each block expands to match its duration, and you can write the <strong>main goals</strong> of that time.</p>
-                <div class="add-task-form">
-                    <label for="taskName">Activity name</label>
-                    <input type="text" id="taskName" placeholder="e.g. Deep work, Client calls, Gym">
-                    <label for="taskDuration">Duration</label>
-                    <select id="taskDuration">
-                        <option value="0.25">15 minutes</option>
-                        <option value="0.5">30 minutes</option>
-                        <option value="0.75">45 minutes</option>
-                        <option value="1" selected>1 hour</option>
-                        <option value="1.5">1.5 hours</option>
-                        <option value="2">2 hours</option>
-                        <option value="2.5">2.5 hours</option>
-                        <option value="3">3 hours</option>
-                        <option value="3.5">3.5 hours</option>
-                        <option value="4">4 hours</option>
-                        <option value="5">5 hours</option>
-                        <option value="6">6 hours</option>
-                    </select>
-                    <button id="addTask">Add Activity</button>
-                </div>
-                <div id="taskList"></div>
+    <div class="main-content">
+        <div class="task-pool">
+            <h2>Activity Pool</h2>
+            <p>Drag activities into the calendar. Each block expands to match its duration, and you can write the <strong>main goals</strong> of that time.</p>
+            <div class="add-task-form">
+                <label for="taskName">Activity name</label>
+                <input type="text" id="taskName" placeholder="e.g. Deep work, Client calls, Gym">
+                <label for="taskDuration">Duration</label>
+                <select id="taskDuration">
+                    <option value="0.25">15 minutes</option>
+                    <option value="0.5">30 minutes</option>
+                    <option value="0.75">45 minutes</option>
+                    <option value="1" selected>1 hour</option>
+                    <option value="1.5">1.5 hours</option>
+                    <option value="2">2 hours</option>
+                    <option value="2.5">2.5 hours</option>
+                    <option value="3">3 hours</option>
+                    <option value="3.5">3.5 hours</option>
+                    <option value="4">4 hours</option>
+                    <option value="5">5 hours</option>
+                    <option value="6">6 hours</option>
+                </select>
+                <button id="addTask">Add Activity</button>
             </div>
+            <div id="taskList"></div>
+        </div>
 
-            <div class="calendar-container">
-                <div class="calendar-grid" id="calendar"></div>
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Hours Scheduled (this week)</div>
-                        <div class="stat-value" id="totalHours">0h</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Blocks on Calendar</div>
-                        <div class="stat-value" id="totalTasks">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Activities in Pool</div>
-                        <div class="stat-value" id="unscheduledTasks">0</div>
-                    </div>
+        <div class="calendar-container">
+            <div class="calendar-grid" id="calendar"></div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Hours Scheduled (this week)</div>
+                    <div class="stat-value" id="totalHours">0h</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Blocks on Calendar</div>
+                    <div class="stat-value" id="totalTasks">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Activities in Pool</div>
+                    <div class="stat-value" id="unscheduledTasks">0</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // Initial seed activities
-        let tasks = [
-            { id: 1, name: 'Deep Work', duration: 2, color: '#ff007f' },
-            { id: 2, name: 'Client Sessions', duration: 3, color: '#ff4fa5' },
-            { id: 3, name: 'Content Creation', duration: 1.5, color: '#ff88c2' },
-            { id: 4, name: 'Movement / Gym', duration: 1, color: '#ff007f' }
-        ];
+<script>
+    const SLOT_MINUTES = 15;
+    const ROWS_PER_HOUR = 60 / SLOT_MINUTES;
 
-        let schedule = {};
-        let currentWeekStart = new Date(2026, 0, 5); // Monday 5 Jan 2026
-        let draggedTaskId = null;
-        let dragSource = null;
+    let tasks = [
+        { id: 1, name: 'Deep Work', duration: 2, color: '#ff007f' },
+        { id: 2, name: 'Client Sessions', duration: 3, color: '#ff4fa5' },
+        { id: 3, name: 'Content Creation', duration: 1.5, color: '#ff88c2' },
+        { id: 4, name: 'Movement / Gym', duration: 1, color: '#ff007f' }
+    ];
 
-        const timeSlots = [];
-        (function buildSlots() {
-            const startHour = 6;
-            const endHour = 21;
-            for (let h = startHour; h <= endHour; h++) {
-                for (let m of [0, 15, 30, 45]) {
-                    if (h === endHour && m > 0) continue;
-                    const hour12 = ((h + 11) % 12) + 1;
-                    const ampm = h < 12 ? 'AM' : 'PM';
-                    const label = `${hour12}:${m.toString().padStart(2, '0')} ${ampm}`;
-                    timeSlots.push({ label, hour: h, minute: m });
-                }
+    let schedule = [];
+    let currentWeekStart = new Date(2026, 0, 5);
+    let draggedSource = null; // "pool" or index in schedule
+    let draggedIndex = null;
+
+    const timeSlots = [];
+    (function buildSlots() {
+        const startHour = 6;
+        const endHour = 21;
+        for (let h = startHour; h <= endHour; h++) {
+            for (let m of [0, 15, 30, 45]) {
+                if (h === endHour && m > 0) continue;
+                const hour12 = ((h + 11) % 12) + 1;
+                const ampm = h < 12 ? 'AM' : 'PM';
+                const label = `${hour12}:${m.toString().padStart(2, '0')} ${ampm}`;
+                timeSlots.push({ label, hour: h, minute: m });
             }
-        })();
+        }
+    })();
 
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-        function init() {
+    function init() {
+        renderTaskList();
+        renderCalendar();
+        updateWeekDisplay();
+        updateStats();
+
+        document.getElementById('addTask').addEventListener('click', addTask);
+        document.getElementById('prevWeek').addEventListener('click', () => changeWeek(-1));
+        document.getElementById('nextWeek').addEventListener('click', () => changeWeek(1));
+        document.getElementById('taskName').addEventListener('keypress', e => {
+            if (e.key === 'Enter') addTask();
+        });
+    }
+
+    function addTask() {
+        const nameInput = document.getElementById('taskName');
+        const durationInput = document.getElementById('taskDuration');
+
+        const name = nameInput.value.trim();
+        const duration = parseFloat(durationInput.value);
+
+        if (name && duration > 0) {
+            tasks.push({
+                id: Date.now(),
+                name,
+                duration,
+                color: '#ff007f'
+            });
+            nameInput.value = '';
+            durationInput.value = '1';
             renderTaskList();
-            renderCalendar();
-            updateWeekDisplay();
-            updateStats();
-
-            document.getElementById('addTask').addEventListener('click', addTask);
-            document.getElementById('prevWeek').addEventListener('click', () => changeWeek(-1));
-            document.getElementById('nextWeek').addEventListener('click', () => changeWeek(1));
-
-            document.getElementById('taskName').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') addTask();
-            });
-        }
-
-        function addTask() {
-            const nameInput = document.getElementById('taskName');
-            const durationInput = document.getElementById('taskDuration');
-
-            const name = nameInput.value.trim();
-            const duration = parseFloat(durationInput.value);
-
-            if (name && duration > 0) {
-                const newTask = {
-                    id: Date.now(),
-                    name,
-                    duration,
-                    color: '#ff007f'
-                };
-                tasks.push(newTask);
-                nameInput.value = '';
-                durationInput.value = '1';
-                renderTaskList();
-                updateStats();
-            }
-        }
-
-        function formatDuration(hours) {
-            if (hours < 1) {
-                return `${Math.round(hours * 60)}min`;
-            } else if (hours % 1 === 0) {
-                return `${hours}h`;
-            } else {
-                const h = Math.floor(hours);
-                const m = Math.round((hours % 1) * 60);
-                return `${h}h ${m}min`;
-            }
-        }
-
-        function deleteScheduledTask(slotKey, instanceId) {
-            if (schedule[slotKey]) {
-                schedule[slotKey] = schedule[slotKey].filter(t => t.instanceId !== instanceId);
-                if (schedule[slotKey].length === 0) {
-                    delete schedule[slotKey];
-                }
-            }
-            renderCalendar();
             updateStats();
         }
+    }
 
-        function deleteTask(taskId) {
-            tasks = tasks.filter(t => t.id !== taskId);
-            Object.keys(schedule).forEach(key => {
-                schedule[key] = schedule[key].filter(t => t.taskId !== taskId);
-                if (schedule[key].length === 0) delete schedule[key];
+    function formatDuration(hours) {
+        if (hours < 1) return `${Math.round(hours * 60)}min`;
+        if (hours % 1 === 0) return `${hours}h`;
+        const h = Math.floor(hours);
+        const m = Math.round((hours % 1) * 60);
+        return `${h}h ${m}min`;
+    }
+
+    function deleteTask(taskId) {
+        tasks = tasks.filter(t => t.id !== taskId);
+        schedule = schedule.filter(ev => ev.taskId !== taskId);
+        renderTaskList();
+        renderCalendar();
+        updateStats();
+    }
+
+    function deleteEvent(index) {
+        schedule.splice(index, 1);
+        renderCalendar();
+        updateStats();
+    }
+
+    function editEventNote(index) {
+        const ev = schedule[index];
+        if (!ev) return;
+        const updated = window.prompt('Main goals of this time blocked:', ev.note || '');
+        if (updated === null) return;
+        ev.note = updated.trim();
+        renderCalendar();
+    }
+
+    function renderTaskList() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = '';
+        tasks.forEach(task => {
+            const el = document.createElement('div');
+            el.className = 'task-item';
+            el.draggable = true;
+            el.dataset.taskId = task.id;
+            el.innerHTML = `
+                <div class="task-info">
+                    <div class="task-name">${task.name}</div>
+                    <div class="task-duration">${formatDuration(task.duration)}</div>
+                </div>
+                <button class="task-delete" onclick="deleteTask(${task.id})">Delete</button>
+            `;
+            el.addEventListener('dragstart', e => {
+                draggedSource = 'pool';
+                draggedIndex = task.id;
+                el.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
             });
-            renderTaskList();
-            renderCalendar();
-            updateStats();
-        }
+            el.addEventListener('dragend', () => el.classList.remove('dragging'));
+            taskList.appendChild(el);
+        });
+    }
 
-        function renderTaskList() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
+    function renderCalendar() {
+        const calendar = document.getElementById('calendar');
+        calendar.innerHTML = '';
 
-            tasks.forEach(task => {
-                const taskEl = document.createElement('div');
-                taskEl.className = 'task-item';
-                taskEl.draggable = true;
-                taskEl.dataset.taskId = task.id;
+        calendar.style.gridTemplateColumns = `64px repeat(${days.length}, 1fr)`;
 
-                taskEl.innerHTML = `
-                    <div class="task-info">
-                        <div class="task-name">${task.name}</div>
-                        <div class="task-duration">${formatDuration(task.duration)}</div>
-                    </div>
-                    <button class="task-delete" onclick="deleteTask(${task.id})">Delete</button>
-                `;
-
-                taskEl.addEventListener('dragstart', handlePoolDragStart);
-                taskEl.addEventListener('dragend', handleDragEnd);
-
-                taskList.appendChild(taskEl);
-            });
-        }
-
-        function renderCalendar() {
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-
-            calendar.appendChild(createHeader(''));
-            days.forEach((day, index) => {
-                const date = new Date(currentWeekStart);
-                date.setDate(date.getDate() + index);
-                const label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                const header = document.createElement('div');
-                header.className = 'calendar-header';
-                header.innerHTML = `${day}<span class="date">${label}</span>`;
-                calendar.appendChild(header);
-            });
-
-            timeSlots.forEach((slotObj, idx) => {
-                const isQuarter = slotObj.minute !== 0;
-                const timeLabel = document.createElement('div');
-                timeLabel.className = 'time-label' + (isQuarter ? ' quarter' : '');
-                timeLabel.textContent = isQuarter ? '·' : slotObj.label;
-                calendar.appendChild(timeLabel);
-
-                days.forEach(day => {
-                    const slot = document.createElement('div');
-                    slot.className = 'time-slot' + (slotObj.minute === 0 ? ' hour-start' : '');
-                    slot.dataset.day = day;
-                    slot.dataset.time = slotObj.label;
-
-                    const slotKey = `${day}-${slotObj.label}`;
-                    if (schedule[slotKey]) {
-                        schedule[slotKey].forEach(taskInstance => {
-                            const taskEl = createScheduledTask(taskInstance, slotKey);
-                            slot.appendChild(taskEl);
-                        });
-                    }
-
-                    slot.addEventListener('dragover', handleDragOver);
-                    slot.addEventListener('drop', handleDrop);
-                    slot.addEventListener('dragleave', handleDragLeave);
-
-                    calendar.appendChild(slot);
-                });
-            });
-        }
-
-        function createHeader(text) {
+        calendar.appendChild(document.createElement('div'));
+        days.forEach((day, index) => {
+            const date = new Date(currentWeekStart);
+            date.setDate(date.getDate() + index);
+            const label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             const header = document.createElement('div');
             header.className = 'calendar-header';
-            header.innerHTML = text;
-            return header;
-        }
+            header.innerHTML = `${day}<span class="date">${label}</span>`;
+            calendar.appendChild(header);
+        });
 
-        function createScheduledTask(taskInstance, slotKey) {
-            const taskEl = document.createElement('div');
-            taskEl.className = 'scheduled-task';
-            taskEl.draggable = true;
-            taskEl.dataset.instanceId = taskInstance.instanceId;
-            taskEl.dataset.slotKey = slotKey;
+        let rowIndex = 1;
+        timeSlots.forEach(slot => {
+            const isQuarter = slot.minute !== 0;
+            const labelCell = document.createElement('div');
+            labelCell.className = 'time-label ' + (isQuarter ? 'quarter' : '');
+            labelCell.textContent = isQuarter ? '·' : slot.label;
+            labelCell.style.gridColumn = '1';
+            labelCell.style.gridRow = rowIndex + 1;
+            calendar.appendChild(labelCell);
 
-            const slotsNeeded = Math.max(1, Math.round(taskInstance.duration / 0.25));
-            const height = slotsNeeded * 20 - 4;
-            taskEl.style.minHeight = `${height}px`;
-            taskEl.style.background = `linear-gradient(145deg, ${taskInstance.color} 0%, #ff4fa5 40%, #ff88c2 100%)`;
+            days.forEach((_, dayIdx) => {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell ' + (slot.minute === 0 ? 'hour' : '');
+                cell.style.gridColumn = dayIdx + 2;
+                cell.style.gridRow = rowIndex + 1;
 
-            const safeNote = taskInstance.note ? taskInstance.note : '';
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'day-slot';
+                slotDiv.dataset.dayIndex = dayIdx;
+                slotDiv.dataset.hour = slot.hour;
+                slotDiv.dataset.minute = slot.minute;
 
-            taskEl.innerHTML = `
+                slotDiv.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+                slotDiv.addEventListener('drop', e => handleDrop(e, dayIdx, slot.hour, slot.minute));
+
+                cell.appendChild(slotDiv);
+                calendar.appendChild(cell);
+            });
+
+            rowIndex++;
+        });
+
+        const eventsLayer = document.createElement('div');
+        eventsLayer.className = 'events-layer';
+        eventsLayer.style.display = 'contents';
+        calendar.appendChild(eventsLayer);
+
+        schedule.forEach((ev, index) => {
+            const rowStart = timeToRow(ev.hour, ev.minute);
+            const rowSpan = Math.max(1, Math.round((ev.duration * 60) / SLOT_MINUTES));
+            const col = ev.dayIndex + 2;
+
+            const el = document.createElement('div');
+            el.className = 'scheduled-task';
+            el.style.gridColumn = `${col}`;
+            el.style.gridRow = `${rowStart + 1} / span ${rowSpan}`;
+            el.draggable = true;
+
+            el.innerHTML = `
                 <div class="scheduled-task-content">
-                    <div class="scheduled-task-title">${taskInstance.name}</div>
-                    <div class="scheduled-duration">${formatDuration(taskInstance.duration)}</div>
-                    ${safeNote ? `<div class="scheduled-note">${safeNote}</div>` : ''}
+                    <div class="scheduled-task-title">${ev.name}</div>
+                    <div class="scheduled-duration">${formatDuration(ev.duration)}</div>
+                    ${ev.note ? `<div class="scheduled-note">${ev.note}</div>` : ''}
                 </div>
                 <div class="scheduled-actions">
-                    <button class="scheduled-btn" title="Edit main goals">Edit</button>
-                    <button class="scheduled-btn delete" title="Delete block">Del</button>
+                    <button class="scheduled-btn">Edit</button>
+                    <button class="scheduled-btn delete">Del</button>
                 </div>
             `;
 
-            const [editBtn, delBtn] = taskEl.querySelectorAll('.scheduled-btn');
-            editBtn.addEventListener('click', (e) => {
+            const [editBtn, delBtn] = el.querySelectorAll('.scheduled-btn');
+            editBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                editBlockNote(slotKey, taskInstance.instanceId);
+                editEventNote(index);
             });
-            delBtn.addEventListener('click', (e) => {
+            delBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                deleteScheduledTask(slotKey, taskInstance.instanceId);
+                deleteEvent(index);
             });
 
-            taskEl.addEventListener('dragstart', handleScheduledDragStart);
-            taskEl.addEventListener('dragend', handleDragEnd);
-
-            return taskEl;
-        }
-
-        function editBlockNote(slotKey, instanceId) {
-            const slotTasks = schedule[slotKey] || [];
-            const instance = slotTasks.find(t => t.instanceId === instanceId);
-            if (!instance) return;
-
-            const current = instance.note || '';
-            const updated = window.prompt('Main goals of this time blocked:', current);
-            if (updated === null) return;
-            instance.note = updated.trim();
-            renderCalendar();
-        }
-
-        function handlePoolDragStart(e) {
-            draggedTaskId = parseInt(e.currentTarget.dataset.taskId, 10);
-            dragSource = 'pool';
-            e.currentTarget.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-        }
-
-        function handleScheduledDragStart(e) {
-            draggedTaskId = parseInt(e.currentTarget.dataset.instanceId, 10);
-            dragSource = e.currentTarget.dataset.slotKey;
-            e.currentTarget.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-        }
-
-        function handleDragEnd(e) {
-            e.currentTarget.classList.remove('dragging');
-            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            e.currentTarget.classList.add('drag-over');
-        }
-
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('drag-over');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('drag-over');
-
-            const targetSlot = e.currentTarget;
-            const slotKey = `${targetSlot.dataset.day}-${targetSlot.dataset.time}`;
-
-            if (dragSource === 'pool') {
-                const baseTask = tasks.find(t => t.id === draggedTaskId);
-                if (!baseTask) return;
-                const instance = {
-                    instanceId: Date.now() + Math.floor(Math.random() * 10000),
-                    taskId: baseTask.id,
-                    name: baseTask.name,
-                    duration: baseTask.duration,
-                    color: baseTask.color,
-                    note: ''
-                };
-                const note = window.prompt('Main goals of this time blocked:', '');
-                if (note !== null && note.trim() !== '') {
-                    instance.note = note.trim();
-                }
-
-                if (!schedule[slotKey]) schedule[slotKey] = [];
-                schedule[slotKey].push(instance);
-            } else {
-                const sourceKey = dragSource;
-                if (!schedule[sourceKey]) return;
-                const idx = schedule[sourceKey].findIndex(t => t.instanceId === draggedTaskId);
-                if (idx === -1) return;
-                const [moved] = schedule[sourceKey].splice(idx, 1);
-                if (!schedule[sourceKey].length) delete schedule[sourceKey];
-
-                if (!schedule[slotKey]) schedule[slotKey] = [];
-                schedule[slotKey].push(moved);
-            }
-
-            renderCalendar();
-            updateStats();
-        }
-
-        function changeWeek(direction) {
-            currentWeekStart.setDate(currentWeekStart.getDate() + direction * 7);
-            updateWeekDisplay();
-            renderCalendar();
-        }
-
-        function updateWeekDisplay() {
-            const endDate = new Date(currentWeekStart);
-            endDate.setDate(endDate.getDate() + 6);
-            const opts = { month: 'short', day: 'numeric', year: 'numeric' };
-            const startStr = currentWeekStart.toLocaleDateString('en-US', opts);
-            const endStr = endDate.toLocaleDateString('en-US', opts);
-            document.getElementById('weekDisplay').textContent = `${startStr} → ${endStr}`;
-        }
-
-        function updateStats() {
-            let totalHours = 0;
-            let totalScheduled = 0;
-
-            Object.values(schedule).forEach(slotTasks => {
-                slotTasks.forEach(taskInstance => {
-                    totalHours += taskInstance.duration;
-                    totalScheduled++;
-                });
+            el.addEventListener('dragstart', e => {
+                draggedSource = 'event';
+                draggedIndex = index;
+                el.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
             });
+            el.addEventListener('dragend', () => el.classList.remove('dragging'));
 
-            document.getElementById('totalHours').textContent = formatDuration(totalHours);
-            document.getElementById('totalTasks').textContent = totalScheduled;
-            document.getElementById('unscheduledTasks').textContent = tasks.length;
+            eventsLayer.appendChild(el);
+        });
+    }
+
+    function timeToRow(hour, minute) {
+        const startHour = timeSlots[0].hour;
+        const totalMinutes = (hour - startHour) * 60 + minute;
+        return totalMinutes / SLOT_MINUTES;
+    }
+
+    function handleDrop(e, dayIndex, hour, minute) {
+        e.preventDefault();
+
+        if (draggedSource === 'pool') {
+            const task = tasks.find(t => t.id === draggedIndex);
+            if (!task) return;
+            const note = window.prompt('Main goals of this time blocked:', '') || '';
+            schedule.push({
+                taskId: task.id,
+                name: task.name,
+                duration: task.duration,
+                color: task.color,
+                note: note.trim(),
+                dayIndex,
+                hour,
+                minute
+            });
+        } else if (draggedSource === 'event') {
+            const ev = schedule[draggedIndex];
+            if (!ev) return;
+            ev.dayIndex = dayIndex;
+            ev.hour = hour;
+            ev.minute = minute;
         }
 
-        init();
-    </script>
+        draggedSource = null;
+        draggedIndex = null;
+        renderCalendar();
+        updateStats();
+    }
+
+    function changeWeek(direction) {
+        currentWeekStart.setDate(currentWeekStart.getDate() + direction * 7);
+        updateWeekDisplay();
+        renderCalendar();
+    }
+
+    function updateWeekDisplay() {
+        const endDate = new Date(currentWeekStart);
+        endDate.setDate(endDate.getDate() + 6);
+        const opts = { month: 'short', day: 'numeric', year: 'numeric' };
+        const startStr = currentWeekStart.toLocaleDateString('en-US', opts);
+        const endStr = endDate.toLocaleDateString('en-US', opts);
+        document.getElementById('weekDisplay').textContent = `${startStr} → ${endStr}`;
+    }
+
+    function updateStats() {
+        let totalHours = 0;
+        schedule.forEach(ev => totalHours += ev.duration);
+        document.getElementById('totalHours').textContent = formatDuration(totalHours);
+        document.getElementById('totalTasks').textContent = schedule.length;
+        document.getElementById('unscheduledTasks').textContent = tasks.length;
+    }
+
+    init();
+
+    window.deleteTask = deleteTask;
+</script>
 </body>
 </html>
-
